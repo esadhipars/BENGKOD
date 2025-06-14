@@ -48,7 +48,7 @@ if st.button("Prediksi"):
 
     # Pastikan urutan dan nama kolom sesuai training
     # Saya menyarankan untuk menyimpannya di pickle juga:
-    with open("model_columns.pkl", "rb") as f:
+    with open("label_caec.pkl", "rb") as f:
         model_columns = pickle.load(f)
 
     # Reorder sesuai training
