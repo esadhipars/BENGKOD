@@ -14,22 +14,6 @@ st.write("Silakan masukkan data pasien untuk prediksi tingkat obesitas")
 with open("model_tuned.pkl", "rb") as f:
     model = pickle.load(f)
 
-# Muat Label Encoder jika memang diberlakukan saat training
-with open("label_caec.pkl", "rb") as f:
-    label_caec = pickle.load(f)
-with open("label_calc.pkl", "rb") as f:
-    label_calc = pickle.load(f)
-with open("label_mtrans.pkl", "rb") as f:
-    label_mtrans = pickle.load(f)
-with open("label_favc.pkl", "rb") as f:
-    label_favc = pickle.load(f)
-with open("label_smoke.pkl", "rb") as f:
-    label_smoke = pickle.load(f)
-with open("label_scc.pkl", "rb") as f:
-    label_scc = pickle.load(f)
-with open("label_history.pkl", "rb") as f:
-    label_history = pickle.load(f)
-
 
 # Input data
 age = st.number_input("Usia", min_value=0, max_value=100, value=25)
@@ -60,16 +44,6 @@ if st.button("Prediksi"):
         'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O',
         'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS'
     ]) 
-
-
-    # Transform sesuai training
-    input_data['CAEC'] = label_caec.transform(input_data['CAEC'].tolist()) 
-    input_data['CALC'] = label_calc.transform(input_data['CALC'].tolist()) 
-    input_data['MTRANS'] = label_mtrans.transform(input_data['MTRANS'].tolist()) 
-    input_data['FAVC'] = label_favc.transform(input_data['FAVC'].tolist()) 
-    input_data['SMOKE'] = label_smoke.transform(input_data['SMOKE'].tolist()) 
-    input_data['SCC'] = label_scc.transform(input_data['SCC'].tolist()) 
-    input_data['family_history_with_overweight'] = label_history.transform(input_data['family_history_with_overweight'].tolist()) 
 
 
     # Prediksi
