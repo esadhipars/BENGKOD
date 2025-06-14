@@ -10,7 +10,7 @@ st.title("Prediksi Tingkat Obesitas")
 # Deskripsi
 st.write("Silakan masukkan data pasien untuk prediksi tingkat obesitas")
 
-# Muat Model
+# Muat Model dan Daftar Kolom
 with open("model_tuned.pkl", "rb") as f:
     model = pickle.load(f)
 
