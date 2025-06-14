@@ -46,6 +46,14 @@ if st.button("Prediksi"):
     ]) 
 
 
+    # Pastikan urutan dan nama kolom sesuai training
+    # Saya menyarankan untuk menyimpannya di pickle juga:
+    with open("model_columns.pkl", "rb") as f:
+        model_columns = pickle.load(f)
+
+    # Reorder sesuai training
+    input_data = input_data.reindex(columns=model_columns, fill_value=0)
+
     # Prediksi
     prediction = model.predict(input_data)[0]
 
