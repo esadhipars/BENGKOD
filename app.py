@@ -10,15 +10,16 @@ st.title("Prediksi Tingkat Obesitas")
 # Deskripsi
 st.write("Silakan masukkan data pasien untuk prediksi tingkat obesitas")
 
-# Muat Model dan Daftar Kolom
+# Muat Model
 with open("model_tuned.pkl", "rb") as f:
     model = pickle.load(f)
 
+# Muat Model Columns
 with open("model_columns.pkl", "rb") as f:
     model_columns = pickle.load(f)
 
 
-# Input data sesuai training
+# Input data
 age = st.number_input("Usia", min_value=0, max_value=100, value=25)
 height = st.number_input("Tinggi Badan (m)", min_value=0.0, max_value=2.5, value=1.7)
 weight = st.number_input("Berat Badan (kg)", min_value=0.0, max_value=500.0, value=70.0)
@@ -35,29 +36,7 @@ tue = st.number_input("Jumlah Jam Menggunakan Perangkat Elektronik per Hari", mi
 calc = st.selectbox("Sering Mengonsumsi Alkohol?", ["Sometimes", "Frequently", "Always", "No"])
 mtrans = st.selectbox("Transportasi yang Digunakan", ["Automobile", "Motorbike", "Public Transportation", "Walking"])
 
-# Tombol prediksi
-if st.button("Prediksi"):
-
-    # Mengumpulkan data yang diberika­n
-    input_data = pd.DataFrame([[
-        age, height, weight, family_history, favc, fcvc, ncp, 
-        caec, smoke, ch2o, scc, faf, tue, calc, mtrans
-    ]], columns=[
-        'Age', 'Height', 'Weight', 'family_history_with_overweight',
-        'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O',
-        'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS'
-    ]) 
-
-
-    # Mengatur sesuai urutan kolom yang diberlakukan saat training
-    input_data = input_data.reindex(columns=model_columns, fill_value=0)
-
-
-    # Prediksi
-    prediction = model.predict(input_data)[0]
-
-    st.success(f"Prediksi Tingkat Obesitas : {prediction}")
-# Mengumpulkan data yang diberika­n
+# Encode sesuai training
 input_data = pd.DataFrame([[
     age, height, weight, 
     1 if family_history == "yes" else 0,
@@ -65,16 +44,17 @@ input_data = pd.DataFrame([[
     fcvc, ncp, 
     0 if caec == "No" else (1 if caec == "Sometimes" else (2 if caec == "Frequently" else 3)),
     1 if smoke == "yes" else 0,
-    ch2o, 
+    ch2o,
     1 if scc == "yes" else 0,
-    faf, 
-    tue, 
+    faf,
+    tue,
     0 if calc == "No" else (1 if calc == "Sometimes" else (2 if calc == "Frequently" else 3)),
     0 if mtrans == "Walking" else (1 if mtrans == "Public Transportation" else (2 if mtrans == "Motorbike" else 3))
 ]], columns=[
-    'Age', 'Height', 'Weight', 'family_history_with_overweight',
-    'FAVC', 'FCVC', 'NCP', 'CAEC',
-    'SMOKE', 'CH2O',
+    'Age', 'Height', 'Weight',
+    'family_history_with_overweight',
+    'FAVC', 'FCVC', 'NCP',
+    'CAEC', 'SMOKE', 'CH2O',
     'SCC', 'FAF', 'TUE',
     'CALC', 'MTRANS'
 ])
@@ -85,8 +65,12 @@ input_data = input_data.reindex(columns=model_columns, fill_value=0)
 # Mengkonversi tipe data ke float
 input_data = input_data.astype(float)
 
-# Prediksi
-prediction = model.predict(input_data)[0]
 
-st.success(f"Prediksi Tingkat Obesitas : {prediction}")
+# Tombol prediksi
+if st.button("Prediksi"):
+
+    # Prediksi
+    prediction = model.predict(input_data)[0]
+
+    st.success(f"Prediksi Tingkat Obesitas : {prediction}")
 
