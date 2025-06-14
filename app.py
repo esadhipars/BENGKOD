@@ -14,8 +14,11 @@ st.write("Silakan masukkan data pasien untuk prediksi tingkat obesitas")
 with open("model_tuned.pkl", "rb") as f:
     model = pickle.load(f)
 
+with open("model_columns.pkl", "rb") as f:
+    model_columns = pickle.load(f)
 
-# Input data
+
+# Input data sesuai training
 age = st.number_input("Usia", min_value=0, max_value=100, value=25)
 height = st.number_input("Tinggi Badan (m)", min_value=0.0, max_value=2.5, value=1.7)
 weight = st.number_input("Berat Badan (kg)", min_value=0.0, max_value=500.0, value=70.0)
@@ -44,6 +47,10 @@ if st.button("Prediksi"):
         'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O',
         'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS'
     ]) 
+
+
+    # Mengatur sesuai urutan kolom yang diberlakukan saat training
+    input_data = input_data.reindex(columns=model_columns, fill_value=0)
 
 
     # Prediksi
